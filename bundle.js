@@ -1,15 +1,20 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-<div class="dropdown">
-	<span class="dropdownTitle">This is a dropdown</span>
-	<ul class="dropList">
-		<li class="dropdownItem">Something</li>
-		<li class="dropdownItem">Something2</li>
-		<li class="dropdownItem">Something3</li>
-	</ul>
-</div>
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = '<div id="dialog-window" style="display: none">\n' +
+    '	<div class="header">\n' +
+    '		<a class="close" href="javascript:void(0);">X</a>\n' +
+    '		<h3>Title</h3>\n' +
+    '	</div>\n' +
+    '	<div class="content">\n' +
+    '		Donec ullamcorper nulla non metus auctor fringilla.\n' +
+    '	</div>\n' +
+    '	<div class="footer">\n' +
+    '		<button rel="btn-cancel">Cancel</button>\n' +
+    '		<button rel="btn-ok">OK</button>\n' +
+    '	</div>\n' +
+    '</div>';
 },{}],2:[function(require,module,exports){
 /**
- * @module views/Dropdown
+ * @module views/DialogWindow
  */
 
 var Backbone = require('backbone'),
@@ -18,39 +23,44 @@ var Backbone = require('backbone'),
 	 * @class
 	 * @extends external:Backbone.Marionette.View
 	 */
-		Dropdown = Backbone.Marionette.View.extend(
-		/** @lends module:views/Dropdown~Dropdown.prototype */
+	DialogWindow = Backbone.Marionette.View.extend(
+		/** @lends module:DialogWindow.prototype */
 		{
 			ui : {
-				title         : '.dropdownTitle',
-				dropList      : '.dropList',
-				dropdownItems : '.dropdownItem'
+				close  : '.close',
+				cancel : '[rel=btn-cancel]',
+				ok     : '[rel=btn-ok]'
 			},
 
 			events : {
-				'click @ui.title'         : 'onTitleClick',
-				'click @ui.dropdownItems' : 'onDropdownItemClick'
+				'click @ui.close'  : 'onDialogCloseClick',
+				'click @ui.cancel' : 'onDialogCancelClick',
+				'click @ui.ok'     : 'onDialogOkClick'
 			},
 
-			/**
-			 * Handles ui.title click event and set the open class to the ui.dropList
-			 */
-			onTitleClick : function() {
-				this.$(this.ui.dropList).addClass('open');
+			show : function() {
+				this.$el.show();
 			},
 
-			/**
-			 * Handles ui.dropItems click and set the clicked item to active
-			 * @param {Jquery.Event} event
-			 */
-			onDropdownItemClick : function(event) {
-				this.$(this.ui.dropdownItems).removeClass('active');
-				this.$(event.target).addClass('active');
+			onDialogCloseClick : function() {
+				this.$el.hide();
+				this.trigger('dialogClose');
+			},
+
+			onDialogCancelClick : function() {
+				this.$el.hide();
+				this.trigger('dialogCancel');
+			},
+
+			onDialogOkClick : function() {
+				this.$el.hide();
+				this.trigger('dialogOk');
 			}
 		}
 	);
 
-module.exports = Dropdown;
+
+module.exports = DialogWindow;
 
 },{"backbone":7}],3:[function(require,module,exports){
 // MarionetteJS (Backbone.Marionette)
@@ -8732,8 +8742,8 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-}).call(this,require("FWaASH"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":14,"FWaASH":13,"inherits":12}],16:[function(require,module,exports){
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./support/isBuffer":14,"_process":13,"inherits":12}],16:[function(require,module,exports){
 module.exports = require('./lib/chai');
 
 },{"./lib/chai":17}],17:[function(require,module,exports){
@@ -24186,7 +24196,7 @@ var sinon = (function (formatio) {
     }
 }(typeof sinon == "object" && sinon || null, typeof window != "undefined" ? window : (typeof self != "undefined") ? self : global));
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../sinon":49}],51:[function(require,module,exports){
 (function (process){
 /**
@@ -24524,8 +24534,8 @@ var sinon = (function (formatio) {
     }
 }(typeof sinon == "object" && sinon || null));
 
-}).call(this,require("FWaASH"))
-},{"../sinon":49,"FWaASH":13}],52:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"../sinon":49,"_process":13}],52:[function(require,module,exports){
 /**
   * @depend ../sinon.js
   * @depend match.js
@@ -26917,7 +26927,7 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = sinon;
 }
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],62:[function(require,module,exports){
 (function (global){
 ((typeof define === "function" && define.amd && function (m) {
@@ -27120,7 +27130,7 @@ if (typeof module !== 'undefined' && module.exports) {
     return Formatio.prototype;
 });
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"samsam":63}],63:[function(require,module,exports){
 ((typeof define === "function" && define.amd && function (m) { define("samsam", m); }) ||
  (typeof module === "object" &&
@@ -28928,45 +28938,59 @@ if (typeof module !== 'undefined' && module.exports) {
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	Backbone = require('backbone'),
-	Dropdown = require('../../libs/DialogWindow/view'),
+	DialogWindow = require('../../libs/DialogWindow/view'),
 	testContent = require('../../content/testcontent1.html');
 
-suite('testing dropdown view', function() {
+suite('testing dialog view', function() {
 	setup(function() {
 		Backbone.$('#sandbox').html(testContent);
-		Dropdown.prototype.onMenuItemClick = sinon.spy(Dropdown.prototype, 'onMenuItemClick');
-		this.dropdown = new Dropdown({el : '#dropdown'});
+		DialogWindow.prototype.onDialogCloseClick = sinon.spy(DialogWindow.prototype, 'onDialogCloseClick');
+		DialogWindow.prototype.onDialogCancelClick = sinon.spy(DialogWindow.prototype, 'onDialogCancelClick');
+		DialogWindow.prototype.onDialogOkClick = sinon.spy(DialogWindow.prototype, 'onDialogOkClick');
+
+		this.dialogWindow = new DialogWindow({el : '#dialog-window'});
 	});
 
 	teardown(function() {
-		Dropdown.prototype.onMenuItemClick.restore();
+		DialogWindow.prototype.onDialogCloseClick.restore();
+		DialogWindow.prototype.onDialogCancelClick.restore();
+		DialogWindow.prototype.onDialogOkClick.restore();
 	});
 
-	test('test menu click', function() {
-		this.dropdown.$(this.dropdown.ui.menuItems).eq(0).click();
-		assert.isTrue(this.dropdown.onMenuItemClick.calledOnce);
+	test('test dialog hidden on start', function(){
+		assert.isFalse(this.dialogWindow.$el.is(':visible'), 'dialog is visible');
 	});
 
-	test('test is menu open', function() {
-		var testItem = this.dropdown.$(this.dropdown.ui.menuItems).eq(2);
-		testItem.click();
-		assert.isTrue(testItem.hasClass(this.dropdown.OPEN_CLASS));
+	test('test if we can show the dialog', function() {
+		this.dialogWindow.show();
+		assert.isTrue(this.dialogWindow.$el.is(':visible'), 'dialog is not visible');
 	});
 
-	test('test is menu close', function() {
-		var testItem = this.dropdown.$(this.dropdown.ui.menuItems).eq(0);
-		testItem.click().click();
-		assert.isTrue(this.dropdown.onMenuItemClick.calledTwice);
-		assert.isTrue(!testItem.hasClass(this.dropdown.OPEN_CLASS));
+	test('test the close button', function() {
+		this.dialogWindow.show();
+
+		this.dialogWindow.$(this.dialogWindow.ui.close).click();
+		assert.isTrue(this.dialogWindow.onDialogCloseClick.calledOnce);
+		assert.isFalse(this.dialogWindow.$el.is(':visible'), 'dialog is visible');
 	});
 
-	test('test subless menu item', function() {
-		var testItem = this.dropdown.$(this.dropdown.ui.menuItems).eq(1);
-		testItem.click();
-		assert.isTrue(this.dropdown.onMenuItemClick.calledOnce);
-		assert.isTrue(!testItem.hasClass(this.dropdown.OPEN_CLASS));
+	test('test the cancel button', function() {
+		this.dialogWindow.show();
+
+		this.dialogWindow.$(this.dialogWindow.ui.cancel).click();
+		assert.isTrue(this.dialogWindow.onDialogCancelClick.calledOnce);
+		assert.isFalse(this.dialogWindow.$el.is(':visible'), 'dialog is visible');
+	});
+
+	test('test the ok button', function() {
+		this.dialogWindow.show();
+
+		this.dialogWindow.$(this.dialogWindow.ui.ok).click();
+		assert.isTrue(this.dialogWindow.onDialogOkClick.calledOnce);
+		assert.isFalse(this.dialogWindow.$el.is(':visible'), 'dialog is visible');
 	});
 });
+
 },{"../../content/testcontent1.html":1,"../../libs/DialogWindow/view":2,"backbone":7,"chai":16,"sinon":49}],66:[function(require,module,exports){
 module.exports = (function() {
 	var Backbone = require('backbone'),
@@ -28978,4 +29002,4 @@ module.exports = (function() {
 })();
 
 
-},{"backbone":7,"backbone.marionette":3,"jquery":48}]},{},[66,65])
+},{"backbone":7,"backbone.marionette":3,"jquery":48}]},{},[66,65]);

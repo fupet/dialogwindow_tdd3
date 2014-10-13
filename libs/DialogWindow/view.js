@@ -1,43 +1,44 @@
 /**
- * @module views/Dropdown
+ * @module views/DialogWindow
  */
-
 var Backbone = require('backbone'),
-
 	/**
 	 * @class
 	 * @extends external:Backbone.Marionette.View
 	 */
-		Dropdown = Backbone.Marionette.View.extend(
-		/** @lends module:views/Dropdown~Dropdown.prototype */
+	DialogWindow = Backbone.Marionette.View.extend(
+		/** @lends module:DialogWindow.prototype */
 		{
 			ui : {
-				title         : '.dropdownTitle',
-				dropList      : '.dropList',
-				dropdownItems : '.dropdownItem'
+				close  : '.close',
+				cancel : '[rel=btn-cancel]',
+				ok     : '[rel=btn-ok]'
 			},
 
 			events : {
-				'click @ui.title'         : 'onTitleClick',
-				'click @ui.dropdownItems' : 'onDropdownItemClick'
+				'click @ui.close'  : 'onDialogCloseClick',
+				'click @ui.cancel' : 'onDialogCancelClick',
+				'click @ui.ok'     : 'onDialogOkClick'
 			},
 
-			/**
-			 * Handles ui.title click event and set the open class to the ui.dropList
-			 */
-			onTitleClick : function() {
-				this.$(this.ui.dropList).addClass('open');
+			show : function() {
+				this.$el.show();
 			},
 
-			/**
-			 * Handles ui.dropItems click and set the clicked item to active
-			 * @param {Jquery.Event} event
-			 */
-			onDropdownItemClick : function(event) {
-				this.$(this.ui.dropdownItems).removeClass('active');
-				this.$(event.target).addClass('active');
+			onDialogCloseClick : function() {
+				this.$el.hide();
+				this.trigger('dialogClose');
+			},
+
+			onDialogCancelClick : function() {
+				this.$el.hide();
+				this.trigger('dialogCancel');
+			},
+
+			onDialogOkClick : function() {
+				this.$el.hide();
+				this.trigger('dialogOk');
 			}
 		}
 	);
-
-module.exports = Dropdown;
+module.exports = DialogWindow;

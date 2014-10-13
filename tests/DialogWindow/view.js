@@ -1,42 +1,55 @@
 var assert = require('chai').assert,
 	sinon = require('sinon'),
 	Backbone = require('backbone'),
-	Dropdown = require('../../libs/DialogWindow/view'),
+	DialogWindow = require('../../libs/DialogWindow/view'),
 	testContent = require('../../content/testcontent1.html');
 
-suite('testing dropdown view', function() {
+suite('testing dialog view', function() {
 	setup(function() {
 		Backbone.$('#sandbox').html(testContent);
-		Dropdown.prototype.onMenuItemClick = sinon.spy(Dropdown.prototype, 'onMenuItemClick');
-		this.dropdown = new Dropdown({el : '#dropdown'});
+		DialogWindow.prototype.onDialogCloseClick = sinon.spy(DialogWindow.prototype, 'onDialogCloseClick');
+		DialogWindow.prototype.onDialogCancelClick = sinon.spy(DialogWindow.prototype, 'onDialogCancelClick');
+		DialogWindow.prototype.onDialogOkClick = sinon.spy(DialogWindow.prototype, 'onDialogOkClick');
+
+		this.dialogWindow = new DialogWindow({el : '#dialog-window'});
 	});
 
 	teardown(function() {
-		Dropdown.prototype.onMenuItemClick.restore();
+		DialogWindow.prototype.onDialogCloseClick.restore();
+		DialogWindow.prototype.onDialogCancelClick.restore();
+		DialogWindow.prototype.onDialogOkClick.restore();
 	});
 
-	test('test menu click', function() {
-		this.dropdown.$(this.dropdown.ui.menuItems).eq(0).click();
-		assert.isTrue(this.dropdown.onMenuItemClick.calledOnce);
+	test('test dialog hidden on start', function() {
+		assert.isFalse(this.dialogWindow.$el.is(':visible'), 'dialog is visible');
 	});
 
-	test('test is menu open', function() {
-		var testItem = this.dropdown.$(this.dropdown.ui.menuItems).eq(2);
-		testItem.click();
-		assert.isTrue(testItem.hasClass(this.dropdown.OPEN_CLASS));
+	test('test if we can show the dialog', function() {
+		this.dialogWindow.show();
+		assert.isTrue(this.dialogWindow.$el.is(':visible'), 'dialog is not visible');
 	});
 
-	test('test is menu close', function() {
-		var testItem = this.dropdown.$(this.dropdown.ui.menuItems).eq(0);
-		testItem.click().click();
-		assert.isTrue(this.dropdown.onMenuItemClick.calledTwice);
-		assert.isTrue(!testItem.hasClass(this.dropdown.OPEN_CLASS));
+	test('test the close button', function() {
+		this.dialogWindow.show();
+
+		this.dialogWindow.$(this.dialogWindow.ui.close).click();
+		assert.isTrue(this.dialogWindow.onDialogCloseClick.calledOnce);
+		assert.isFalse(this.dialogWindow.$el.is(':visible'), 'dialog is visible');
 	});
 
-	test('test subless menu item', function() {
-		var testItem = this.dropdown.$(this.dropdown.ui.menuItems).eq(1);
-		testItem.click();
-		assert.isTrue(this.dropdown.onMenuItemClick.calledOnce);
-		assert.isTrue(!testItem.hasClass(this.dropdown.OPEN_CLASS));
+	test('test the cancel button', function() {
+		this.dialogWindow.show();
+
+		this.dialogWindow.$(this.dialogWindow.ui.cancel).click();
+		assert.isTrue(this.dialogWindow.onDialogCancelClick.calledOnce);
+		assert.isFalse(this.dialogWindow.$el.is(':visible'), 'dialog is visible');
+	});
+
+	test('test the ok button', function() {
+		this.dialogWindow.show();
+
+		this.dialogWindow.$(this.dialogWindow.ui.ok).click();
+		assert.isTrue(this.dialogWindow.onDialogOkClick.calledOnce);
+		assert.isFalse(this.dialogWindow.$el.is(':visible'), 'dialog is visible');
 	});
 });
